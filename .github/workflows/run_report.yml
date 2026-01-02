@@ -1,0 +1,29 @@
+name: Run Ambras Maandrapport
+
+on:
+  schedule:
+    - cron: '0 9 3 * *'  # Elke 3de van de maand om 09:00 UTC (10:00 Belgische tijd)
+  workflow_dispatch:      # Hiermee verschijnt de "Play"-knop voor handmatige tests!
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install gspread pandas Pillow
+
+      - name: Run script
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        run: python maandrapport.py
