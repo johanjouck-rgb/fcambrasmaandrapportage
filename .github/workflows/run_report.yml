@@ -2,8 +2,17 @@ name: Run Ambras Maandrapport
 
 on:
   schedule:
-    - cron: '0 9 3 * *'  # Elke 3de van de maand om 09:00 UTC (10:00 Belgische tijd)
-  workflow_dispatch:      # Hiermee verschijnt de "Play"-knop voor handmatige tests!
+    # Uitleg:
+    # 0 = minuut 0
+    # 7 = uur 7 UTC (In de winter is België UTC+1, dus 08:00 Belgische tijd)
+    # 1 = dag 1 van de maand
+    # * = elke maand
+    # * = elke dag van de week
+    - cron: '0 7 1 * *'
+  
+  # Hiermee behoud je de 'Play' knop om handmatig te testen indien ooit nodig,
+  # maar hij gaat NIET automatisch af bij opslaan.
+  workflow_dispatch:
 
 jobs:
   build:
@@ -18,12 +27,17 @@ jobs:
           python-version: '3.10'
 
       - name: Install dependencies
+        # Ik heb google-auth toegevoegd voor de zekerheid, dat is veiliger voor gspread
         run: |
-          pip install gspread pandas Pillow
+          pip install gspread pandas Pillow google-auth
 
       - name: Run script
         env:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        # LET OP: In jouw voorbeeld stond 'maandrapport.py'.
+        # Als je mijn Python-script in een bestand genaamd 'main.py' hebt gezet,
+        # moet je hieronder 'python main.py' laten staan.
+        # Heet je bestand toch 'maandrapport.py'? Verander het dan hieronder.
         run: python maandrapport.py
