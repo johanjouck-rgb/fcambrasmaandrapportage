@@ -55,7 +55,7 @@ def verstuur_mail(bestandsnaam, pad, maand_naam):
     msg['To'] = ", ".join(EMAIL_ONTVANGERS)
     
     # AANGEPASTE TEKST
-    msg.set_content(f"Dag beste vrienden van Ambras,\n\nHierbij het volledige grafische maandrapport van {maand_naam}.\n\nFC Ambras is wereldklas!\n\nMet sportieve groet,\nAmbrasbot")
+    msg.set_content(f"Dag beste vrienden van Ambras,\n\nHierbij het maandrapport van {maand_naam}.\n\nFC Ambras is wereldklas!\n\nMet sportieve groet,\nAmbrasbot")
 
     with open(pad, 'rb') as f:
         msg.add_attachment(f.read(), maintype='image', subtype='png', filename=bestandsnaam)
@@ -188,3 +188,4 @@ def genereer_maandrapport():
 
 if __name__ == "__main__":
     genereer_maandrapport()
+
